@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from numpy import ndarray
 from typing import Any, Protocol, runtime_checkable
+from pathlib import Path
 from abc import abstractmethod as abstract
 from numpy.typing import ArrayLike
 
@@ -633,13 +634,13 @@ class IFigure(Protocol):
         """
 
     @abstract
-    def save(self, filename: str) -> IFigure:
+    def save(self, filename: str | Path) -> IFigure:
         """
         Save the figure to a file.
 
         Parameters
         ----------
-        filename : str
+        filename
             The filename for saving the figure.
 
         Returns

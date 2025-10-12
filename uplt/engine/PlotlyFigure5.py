@@ -4,6 +4,7 @@ import numpy as np
 from numpy import ndarray
 from numpy.typing import ArrayLike
 from typing import Any
+from pathlib import Path
 
 import uplt.color as ucolor
 import uplt.utool as utool
@@ -489,8 +490,9 @@ class PlotlyFigure5(IFigure):
         image = image[..., :3] # RGBA -> RGB
         return image
 
-    def save(self, filename: str) -> IFigure:
-        if '.html' in filename:
+    def save(self, filename: str | Path) -> IFigure:
+        filename = Path(filename)
+        if filename.suffix.lower() == '.html':
             self._fig.write_html(filename)
         else:
             self._fig.write_image(filename)

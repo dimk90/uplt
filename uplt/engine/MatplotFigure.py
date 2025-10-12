@@ -4,6 +4,7 @@ import numpy as np
 from numpy import ndarray
 from numpy.typing import ArrayLike
 from typing import Any
+from pathlib import Path
 
 import uplt.color as ucolor
 import uplt.utool as utool
@@ -474,7 +475,7 @@ class MatplotFigure(IFigure):
         w, h = fig.canvas.get_width_height()
         return image.reshape([h, w, 4])
 
-    def save(self, filename: str) -> IFigure:
+    def save(self, filename: str | Path) -> IFigure:
         assert self._fig is not None, 'figure is closed'
         self._fig.savefig(filename, dpi=self.SAVING_DPI)
         return self
