@@ -1,4 +1,3 @@
-
 # copied from ggplot2, the layout is modified to match BMH style
 bmh = {
     'data': {'bar': [{'error_x': {'color': 'rgb(51,51,51)'},
@@ -44,13 +43,6 @@ bmh = {
                           'colorscale': [[0, 'rgb(20,44,66)'], [1,
                                          'rgb(90,179,244)']],
                           'type': 'heatmap'}],
-             'heatmapgl': [{'colorbar': {'outlinewidth': 0,
-                                         'tickcolor': 'rgb(237,237,237)',
-                                         'ticklen': 6,
-                                         'ticks': 'inside'},
-                            'colorscale': [[0, 'rgb(20,44,66)'], [1,
-                                           'rgb(90,179,244)']],
-                            'type': 'heatmapgl'}],
              'histogram': [{'marker': {'pattern': {'fillmode': 'overlay', 'size': 10, 'solidity': 0.2}},
                             'type': 'histogram'}],
              'histogram2d': [{'colorbar': {'outlinewidth': 0,
