@@ -8,7 +8,7 @@
 [![jupyter](https://img.shields.io/badge/Jupyter-Lab-F37626.svg?style=flat&logo=Jupyter)](https://jupyterlab.readthedocs.io/en/stable)
 [![marimo](https://img.shields.io/badge/🌊%20%20🍃-marimo-1C7361)](https://marimo.io/)
 [![license](https://img.shields.io/badge/License-BSD%203--Clause-green)](https://choosealicense.com/licenses/mit/)
-![PyPI - Version](https://img.shields.io/pypi/v/uplt-py)
+[![PyPI - Version](https://img.shields.io/pypi/v/uplt-py)](https://pypi.org/project/uplt-py)
 
 Unified API and style for Python plotting libraries.
 
