@@ -1,7 +1,7 @@
 [project]
 name = "uplt-py"
 description = "Unified API and style for Python plotting libraries"
-version = "0.8.4"
+version = "0.8.4.dev"
 authors = [
     { name = "Dmitry Makarov", email="makarovdmv@gmail.com" },
 ]
@@ -28,8 +28,8 @@ matplot = [
     "matplotlib >= 3.7, < 4.0"
 ]
 plotly = [
-    'plotly >= 5.16, < 6.0',
-    'kaleido',
+    'plotly >= 5.16, < 7.0',
+    'kaleido >= 0.4, < 2.0',
 ]
 all = [ "uplt-py[matplot, plotly]" ]
 
