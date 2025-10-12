@@ -1,12 +1,14 @@
 <h1 align="center">
-    <img src="https://media.githubusercontent.com/media/makarovdi/uplt/refs/heads/develop/logo.png", width=200>
+    <img src="https://media.githubusercontent.com/media/dimk90/uplt/refs/heads/develop/logo.png", width=200>
 </h1>
 
 <br>
 
-[![python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)](https://docs.python.org/3/whatsnew/3.10.html)
-[![license](https://img.shields.io/badge/License-BSD%203--Clause-green)](https://choosealicense.com/licenses/mit/)
+[![python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://docs.python.org/3/whatsnew/3.10.html)
 [![jupyter](https://img.shields.io/badge/Jupyter-Lab-F37626.svg?style=flat&logo=Jupyter)](https://jupyterlab.readthedocs.io/en/stable)
+[![marimo](https://img.shields.io/badge/🌊%20%20🍃-marimo-1C7361)](https://marimo.io/)
+[![license](https://img.shields.io/badge/License-BSD%203--Clause-green)](https://choosealicense.com/licenses/mit/)
+![PyPI - Version](https://img.shields.io/pypi/v/uplt-py)
 
 Unified API and style for Python plotting libraries.
 
@@ -65,7 +67,7 @@ fig.legend().show()
 <td>
 
 <picture align="center">
-    <img src="https://media.githubusercontent.com/media/makarovdi/uplt/refs/heads/main/gallery/asset/plotly5-example.png">
+    <img src="https://media.githubusercontent.com/media/dimk90/uplt/refs/heads/main/gallery/asset/plotly5-example.png">
 </picture>
 
 </td>
@@ -73,7 +75,7 @@ fig.legend().show()
 <td>
 
 <picture align="center">
-    <img src="https://media.githubusercontent.com/media/makarovdi/uplt/refs/heads/main/gallery/asset/mpl-example.png">
+    <img src="https://media.githubusercontent.com/media/dimk90/uplt/refs/heads/main/gallery/asset/mpl-example.png">
 </picture>
 
 </td>
@@ -173,7 +175,7 @@ fig.plot(car_crashes[['total', 'speeding', 'alcohol', 'no_previous']])
 fig.show()
 ```
 <picture align="left">
-    <img src='https://media.githubusercontent.com/media/makarovdi/uplt/refs/heads/main/gallery/asset/plugin.png' width='480'>
+    <img src='https://media.githubusercontent.com/media/dimk90/uplt/refs/heads/main/gallery/asset/plugin.png' width='480'>
 </picture>
 
 

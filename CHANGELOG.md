@@ -1,5 +1,19 @@
 # Changelog
 
+## `[v0.8.5]` - 12.10.2025
+
+#### Changed
+* `[ci]` Bump `plotly` version to `6.x` and `kaleido` to `1.x`.
+* `[ci]` Bump `pillow` version to `11.3`.
+* `[interface]` Add `Path` support for `IFigure.save(filename)`.
+* `[interface]` Allow `color` argument to be `Sequence[str]` for custom (plugin) types in `plot()`.
+
+#### Fixed
+* `[engine.plotly]` Update style for compatibility with Plotly 6.3. #2
+* `[engine.plotly]` Fix low resolution issue with saving plotly figure as image.
+* `[engine]` Fix `show()` method when running in `marimo`.
+
+
 ## `[v0.8.4]` - 22.04.2025
 
 #### Changed
