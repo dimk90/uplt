@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from numpy import ndarray
-from typing import Any, Protocol, runtime_checkable
-from abc import abstractmethod as abstract
+from pathlib import Path
 from numpy.typing import ArrayLike
+from collections.abc import Sequence
+from abc import abstractmethod as abstract
+from typing import Any, Protocol, runtime_checkable
 
-from uplt.utype import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
 from uplt.utool import Interpolator
+from uplt.utype import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
 
 
 @runtime_checkable
@@ -64,7 +66,7 @@ class IFigure(Protocol):
                    y           : ArrayLike | None = None,
                    z           : ArrayLike | None = None,
                    name        : str | None = None,
-                   color       : str | None = None,
+                   color       : str | Sequence[str] | None = None,
                    line_style  : LineStyle | None = None,
                    marker_style: MarkerStyle | None = None,
                    marker_size : float | None = None,
@@ -83,8 +85,9 @@ class IFigure(Protocol):
         name : str or None, optional
             The plot name, which will appear as the legend item.
 
-        color : str or None, optional
-            The color of the line.
+        color : str or Sequence[str] or None, optional
+            The color of the line. Multiple colors can be provided
+            for the case of custom objects if corresponding plugin supports it.
 
         line_style : LineStyle or None, optional
             The line style.
@@ -116,7 +119,7 @@ class IFigure(Protocol):
                       y           : ArrayLike | None = None,
                       z           : ArrayLike | None = None,
                       name        : str | None = None,
-                      color       : str | list[str] | None = None,
+                      color       : str | Sequence[str] | None = None,
                       marker_style: MarkerStyle | None = None,
                       marker_size : float | None = None,
                       opacity     : float = 1.0,
@@ -128,13 +131,15 @@ class IFigure(Protocol):
         Parameters
         ----------
         x, y, z : ArrayLike
-            1D data arrays of the same size. The x could be any object supported by a plugin.
+            1D data arrays of the same size.
+            The x could be any object supported by a plugin.
 
         name : str or None, optional
             The plot name, which will appear as the legend item.
 
         color : str, list of str, or None, optional
-            The color(s) of the markers.
+            The color(s) of the markers. Multiple colors can be provided
+            for each data point or for corresponding plugin in case of custom object.
 
         marker_style : MarkerStyle or None, optional
             The marker style.
@@ -633,13 +638,13 @@ class IFigure(Protocol):
         """
 
     @abstract
-    def save(self, filename: str) -> IFigure:
+    def save(self, filename: str | Path) -> IFigure:
         """
         Save the figure to a file.
 
         Parameters
         ----------
-        filename : str
+        filename
             The filename for saving the figure.
 
         Returns

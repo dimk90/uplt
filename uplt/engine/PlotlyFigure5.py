@@ -4,15 +4,18 @@ import numpy as np
 from numpy import ndarray
 from numpy.typing import ArrayLike
 from typing import Any
+from pathlib import Path
+from collections.abc import Sequence
 
 import uplt.color as ucolor
 import uplt.utool as utool
 import uplt.plugin as plugin
+import uplt.detect as detect
 
 from uplt.interface import IFigure
-from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
-from uplt.engine.PlotlyEngine5 import PlotlyEngine5
 from uplt.utool import Interpolator
+from uplt.engine.PlotlyEngine5 import PlotlyEngine5
+from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
 
 
 class PlotlyFigure5(IFigure):
@@ -48,7 +51,7 @@ class PlotlyFigure5(IFigure):
                    y           : ArrayLike | None = None,
                    z           : ArrayLike | None = None,
                    name        : str | None = None,
-                   color       : str | None = None,
+                   color       : str | Sequence[str] | None = None,
                    line_style  : LineStyle | None = None,
                    marker_style: MarkerStyle | None = None,
                    marker_size : float | None = None,
@@ -72,6 +75,7 @@ class PlotlyFigure5(IFigure):
 
         self._is_3d = z is not None
 
+        assert isinstance(color, str | None), 'color must be a string or None for line plot'
         if color is None:
             color = self.scroll_color()
 
@@ -95,7 +99,7 @@ class PlotlyFigure5(IFigure):
                       y           : ArrayLike | None = None,
                       z           : ArrayLike | None = None,
                       name        : str | None = None,
-                      color       : str | list[str] | None = None,
+                      color       : str | Sequence[str] | None = None,
                       marker_style: MarkerStyle | None = None,
                       marker_size : float | None = None,
                       opacity     : float = 1.0,
@@ -489,11 +493,12 @@ class PlotlyFigure5(IFigure):
         image = image[..., :3] # RGBA -> RGB
         return image
 
-    def save(self, filename: str) -> IFigure:
-        if '.html' in filename:
+    def save(self, filename: str | Path) -> IFigure:
+        filename = Path(filename)
+        if filename.suffix.lower() == '.html':
             self._fig.write_html(filename)
         else:
-            self._fig.write_image(filename)
+            self._fig.write_image(filename, scale=self.FILE_RESOLUTION_SCALE)
         return self
 
     def close(self):
@@ -501,6 +506,9 @@ class PlotlyFigure5(IFigure):
         self._fig.layout = {}
 
     def show(self, block: bool=True):
+        if detect.is_marimo():
+            # marimo can visualize plotly figure directly
+            return self.internal
         self.engine.pio.show(self._fig)
 
     ## Protected ##

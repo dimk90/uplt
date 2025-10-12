@@ -1,7 +1,7 @@
 [project]
 name = "uplt-py"
 description = "Unified API and style for Python plotting libraries"
-version = "0.8.4"
+version = "0.8.5"
 authors = [
     { name = "Dmitry Makarov", email="makarovdmv@gmail.com" },
 ]
@@ -17,8 +17,8 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "numpy   >= 1.21, < 3.0",    # 1.21: ArrayLike and extended annotations: https://numpy.org/devdocs/reference/typing.html
-    "pillow  >= 10.3.0, < 11.0", # versions < 10.3 are vulnerable: https://security.snyk.io/package/pip/pillow
+    "numpy   >= 1.21, < 3.0",  # 1.21: ArrayLike and extended annotations: https://numpy.org/devdocs/reference/typing.html
+    "pillow  >= 11.3, < 12.0", # versions < 11.3 are vulnerable: https://security.snyk.io/package/pip/pillow
     "scipy   >= 1.11, < 2.0",
 ]
 
@@ -28,8 +28,8 @@ matplot = [
     "matplotlib >= 3.7, < 4.0"
 ]
 plotly = [
-    'plotly >= 5.16, < 6.0',
-    'kaleido',
+    'plotly >= 5.16, < 7.0',
+    'kaleido >= 0.4, < 2.0',
 ]
 all = [ "uplt-py[matplot, plotly]" ]
 

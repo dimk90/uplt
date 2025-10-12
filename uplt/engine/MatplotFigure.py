@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import numpy as np
+from typing import Any
+from pathlib import Path
 from numpy import ndarray
 from numpy.typing import ArrayLike
-from typing import Any
+from collections.abc import Sequence
 
 import uplt.color as ucolor
 import uplt.utool as utool
 import uplt.plugin as plugin
+import uplt.detect as detect
 
 from uplt.interface import IFigure, LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
 from uplt.engine.MatplotEngine import MatplotEngine
@@ -57,7 +60,7 @@ class MatplotFigure(IFigure):
                    y           : ArrayLike | None = None,
                    z           : ArrayLike | None = None,
                    name        : str | None = None,
-                   color       : str | None = None,
+                   color       : str | Sequence[str] | None = None,
                    line_style  : LineStyle | None = None,
                    marker_style: MarkerStyle | None = None,
                    marker_size : float | None = None,
@@ -83,6 +86,7 @@ class MatplotFigure(IFigure):
         axis = self._init_axis(is_3d=z is not None)
 
         # init color
+        assert isinstance(color, str | None), 'color must be a string or None for line plot'
         if color is None:
             color = self.scroll_color()
 
@@ -101,7 +105,7 @@ class MatplotFigure(IFigure):
                       y           : ArrayLike | None = None,
                       z           : ArrayLike | None = None,
                       name        : str | None = None,
-                      color       : str | list[str] | None = None,
+                      color       : str | Sequence[str] | None = None,
                       marker_style: MarkerStyle | None = None,
                       marker_size : float | None = None,
                       opacity     : float = 1.0,
@@ -474,7 +478,7 @@ class MatplotFigure(IFigure):
         w, h = fig.canvas.get_width_height()
         return image.reshape([h, w, 4])
 
-    def save(self, filename: str) -> IFigure:
+    def save(self, filename: str | Path) -> IFigure:
         assert self._fig is not None, 'figure is closed'
         self._fig.savefig(filename, dpi=self.SAVING_DPI)
         return self
@@ -485,6 +489,10 @@ class MatplotFigure(IFigure):
 
     def show(self, block: bool=True):
         assert self._fig is not None, 'figure is closed'
+
+        if detect.is_marimo():
+            # marimo can visualize matplotlib figures directly
+            return self.internal
 
         if self.engine.is_ipython_backend:
             # there are two ways for consistent figure visualization in jupyter

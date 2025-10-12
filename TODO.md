@@ -3,12 +3,12 @@
 ## Next Release
 
 - [ ] **API**: plot_range(x, y_up, y_down, ...)
-- [ ] update to `plotly 6`
+- [x] update to `plotly 6`
+- [ ] **API**: `fig.legend`: param for the legend location
+- [ ] `README` Add name, description and shortcuts for all engines
 
 ## Backlog
 - [ ] **API**: `line_width` parameter for `fig.plot(...)`
-- [ ] **API**: `fig.legend`: param for the legend location
-- [ ] `README` Add name, description and shortcuts for all engines
 - [ ] `README` example for non-gui (file) plotting
 - [ ] **API**: `opacity: float` -> `opacity: float | list[float]`
 - [ ] **API**: `fig.click_event(...)`
@@ -16,7 +16,8 @@
   - [x] Engine independent config: `uplot.DEFAULT`
 - [ ] TeX support
 - [ ] `DataFrame` basic support
-- [ ] `Bokeh` engine
+- [ ] Add `Altair` engine
+- [ ] Add `Bokeh` engine
 
 ## Done
 

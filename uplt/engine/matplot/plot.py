@@ -1,14 +1,14 @@
 import numpy as np
 from numpy.typing import ArrayLike
+from collections.abc import Sequence
 
 import uplt.color as ucolor
-
-from uplt.interface import LineStyle, MarkerStyle
 from uplt.default import DEFAULT
+from uplt.interface import LineStyle, MarkerStyle
 
 
 def plot_line_marker(axis,
-                     color       : str | list[str],
+                     color       : str | Sequence[str],
                      x           : ArrayLike,
                      y           : ArrayLike | None = None,
                      z           : ArrayLike | None = None,
