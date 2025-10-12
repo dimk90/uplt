@@ -26,7 +26,7 @@ f1.xlabel('X value')
 f1.ylabel('Y value')
 
 if save_to_file:
-    f1.save('fig1.save.jpg')
+    f1.save('fig1.save.png')
     iio.imwrite('fig1.as_image.png', f1.as_image())
 else:
     f1.show(block=False)
@@ -44,7 +44,7 @@ f2.xlim(-0.5)
 f2.ylim(0)
 
 if save_to_file:
-    f2.save('fig2.save.jpg')
+    f2.save('fig2.save.png')
     iio.imwrite('fig2.as_image.png', f2.as_image())
 else:
     f2.show()

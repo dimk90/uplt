@@ -495,7 +495,7 @@ class PlotlyFigure5(IFigure):
         if filename.suffix.lower() == '.html':
             self._fig.write_html(filename)
         else:
-            self._fig.write_image(filename)
+            self._fig.write_image(filename, scale=self.FILE_RESOLUTION_SCALE)
         return self
 
     def close(self):
