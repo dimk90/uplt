@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import numpy as np
-from numpy import ndarray
-from numpy.typing import ArrayLike
 from typing import Any
 from pathlib import Path
+from numpy import ndarray
+from numpy.typing import ArrayLike
+from collections.abc import Sequence
 
 import uplt.color as ucolor
 import uplt.utool as utool
@@ -58,7 +59,7 @@ class MatplotFigure(IFigure):
                    y           : ArrayLike | None = None,
                    z           : ArrayLike | None = None,
                    name        : str | None = None,
-                   color       : str | None = None,
+                   color       : str | Sequence[str] | None = None,
                    line_style  : LineStyle | None = None,
                    marker_style: MarkerStyle | None = None,
                    marker_size : float | None = None,
@@ -84,6 +85,7 @@ class MatplotFigure(IFigure):
         axis = self._init_axis(is_3d=z is not None)
 
         # init color
+        assert isinstance(color, str | None), 'color must be a string or None for line plot'
         if color is None:
             color = self.scroll_color()
 
@@ -102,7 +104,7 @@ class MatplotFigure(IFigure):
                       y           : ArrayLike | None = None,
                       z           : ArrayLike | None = None,
                       name        : str | None = None,
-                      color       : str | list[str] | None = None,
+                      color       : str | Sequence[str] | None = None,
                       marker_style: MarkerStyle | None = None,
                       marker_size : float | None = None,
                       opacity     : float = 1.0,

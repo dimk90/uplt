@@ -1,16 +1,15 @@
 import numpy as np
+from collections.abc import Sequence
 from numpy.typing import ArrayLike
+from plotly.graph_objs import Figure
 
 import uplt.color as ucolor
-
 from uplt.interface import LineStyle, MarkerStyle
 from uplt.default import DEFAULT
 
-from plotly.graph_objs import Figure
-
 
 def plot_line_marker(figure      : Figure,
-                     color       : str | list[str],
+                     color       : str | Sequence[str],
                      x           : ArrayLike,
                      y           : ArrayLike | None = None,
                      z           : ArrayLike | None = None,
