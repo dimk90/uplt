@@ -10,11 +10,12 @@ from collections.abc import Sequence
 import uplt.color as ucolor
 import uplt.utool as utool
 import uplt.plugin as plugin
+import uplt.detect as detect
 
 from uplt.interface import IFigure
-from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
-from uplt.engine.PlotlyEngine5 import PlotlyEngine5
 from uplt.utool import Interpolator
+from uplt.engine.PlotlyEngine5 import PlotlyEngine5
+from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
 
 
 class PlotlyFigure5(IFigure):
@@ -505,6 +506,9 @@ class PlotlyFigure5(IFigure):
         self._fig.layout = {}
 
     def show(self, block: bool=True):
+        if detect.is_marimo():
+            # marimo can visualize plotly figure directly
+            return self.internal
         self.engine.pio.show(self._fig)
 
     ## Protected ##

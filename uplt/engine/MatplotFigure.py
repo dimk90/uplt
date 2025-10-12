@@ -10,6 +10,7 @@ from collections.abc import Sequence
 import uplt.color as ucolor
 import uplt.utool as utool
 import uplt.plugin as plugin
+import uplt.detect as detect
 
 from uplt.interface import IFigure, LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
 from uplt.engine.MatplotEngine import MatplotEngine
@@ -488,6 +489,10 @@ class MatplotFigure(IFigure):
 
     def show(self, block: bool=True):
         assert self._fig is not None, 'figure is closed'
+
+        if detect.is_marimo():
+            # marimo can visualize matplotlib figures directly
+            return self.internal
 
         if self.engine.is_ipython_backend:
             # there are two ways for consistent figure visualization in jupyter
