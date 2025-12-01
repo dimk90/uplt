@@ -5,10 +5,10 @@
 <br>
 
 [![python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://docs.python.org/3/whatsnew/3.10.html)
-[![jupyter](https://img.shields.io/badge/Jupyter-Lab-F37626.svg?style=flat&logo=Jupyter)](https://jupyterlab.readthedocs.io/en/stable)
-[![marimo](https://img.shields.io/badge/🌊%20%20🍃-marimo-1C7361)](https://marimo.io/)
-[![license](https://img.shields.io/badge/License-BSD%203--Clause-green)](https://choosealicense.com/licenses/mit/)
 [![PyPI - Version](https://img.shields.io/pypi/v/uplt-py)](https://pypi.org/project/uplt-py)
+[![marimo](https://img.shields.io/badge/🌊%20%20🍃-marimo-1C7361)](https://marimo.io/)
+[![jupyter](https://img.shields.io/badge/Jupyter-Lab-F37626.svg?style=flat&logo=Jupyter)](https://jupyterlab.readthedocs.io/en/stable)
+[![license](https://img.shields.io/badge/License-BSD%203--Clause-green)](https://choosealicense.com/licenses/mit/)
 
 Unified API and style for Python plotting libraries.
 
@@ -83,9 +83,9 @@ fig.legend().show()
 </tr>
 </table>
 
-> 💡 See [gallery](https://github.com/makarovdi/uplt/blob/main/gallery/gallery.md) for more examples.  
+> [!TIP] 
+> See [gallery](https://github.com/makarovdi/uplt/blob/main/gallery/gallery.md) for more examples.  
 
-> 💡 The `uplot` alias is available and can be used interchangeably with `uplt`.
 
 ## Install
 
@@ -102,7 +102,8 @@ If you need only `matplotlib` support:
 ```bash
 pip install "uplt-py[matplot]"
 ```
-> 💡  Replace `[matplot]` with `[plotly]` for plotly-only installation
+> [!TIP]
+> Replace `[matplot]` with `[plotly]` for plotly-only installation
 
 
 ## Plotting Libs - Pros & Cons
@@ -201,7 +202,8 @@ class DataFramePlugin(plugin.IPlotPlugin):
 plugin.register(pd.DataFrame, handler=DataFramePlugin())
 ```
 
-> 💡 Check `test/plugin.py` for a more advanced plugin example.
+> [!TIP]
+> Check `test/plugin.py` for a more advanced plugin example.
 
 ### Engine
 
@@ -246,7 +248,3 @@ fig.show()
 
 This software is licensed under the `BSD-3-Clause` license.
 See the [LICENSE](https://github.com/makarovdi/uplt/blob/main/LICENSE) file for details.
-
-## TODO
-
-Check the plan for new features [here](https://github.com/makarovdi/uplt/blob/develop/TODO.md).

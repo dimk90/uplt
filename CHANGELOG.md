@@ -1,5 +1,11 @@
 # Changelog
 
+## `[v0.9.0]` - TBD
+
+### New
+* `[gallery]` Add marimo notebook for the gallery.
+
+
 ## `[v0.8.5]` - 12.10.2025
 
 #### Changed
