@@ -5,6 +5,9 @@
 ### New
 * `[gallery]` Add marimo notebook for the gallery.
 
+#### Changed
+* `[style.plotly]` Change default `dragmode` to `turntable` for 3D plots.
+
 
 ## `[v0.8.5]` - 12.10.2025
 
