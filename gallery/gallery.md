@@ -1,11 +1,6 @@
 # Gallery
-
-1. [plot](#plot)
-1. [scatter](#scatter)
-1. [surface3d](#surface3d)
-
-
-> See also jupyter notebook: `gallery.ipynb`.
+> [!TIP]
+> See also gallery demo for jupyter and marimo: `gallery.ipynb` and `gallery.py` .
 
 ## plot
 
