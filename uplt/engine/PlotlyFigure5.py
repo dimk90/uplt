@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 from numpy import ndarray
 from numpy.typing import ArrayLike
-from typing import Any
+from typing import Any, override
 from pathlib import Path
 from collections.abc import Sequence
 
@@ -15,7 +15,8 @@ import uplt.detect as detect
 from uplt.interface import IFigure
 from uplt.utool import Interpolator
 from uplt.engine.PlotlyEngine5 import PlotlyEngine5
-from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
+from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale
+from uplt.interface import Colormap, ColormapMode
 
 
 class PlotlyFigure5(IFigure):
@@ -317,12 +318,9 @@ class PlotlyFigure5(IFigure):
             # https://github.com/plotly/plotly.py/issues/2885#issuecomment-724679904
             cmap = cmap or 'gray'
             fig.add_trace(self.engine.go.Heatmap(z=image, colorscale=cmap))
-            # constrain='domain' -> prevent the axes from being zoomed or panned beyond the plot domain
-            # scaleanchor='x' -> sets the same scale for x and y axis
-            # autorange='reversed' -> origin at top-left corner
-            fig.update_yaxes(autorange='reversed', scaleanchor='x', constrain='domain')
-            fig.update_xaxes(constrain='domain')
+            fig.update_yaxes(autorange='reversed')   # origin at top-left corner
             fig.update_traces(dict(showscale=False)) # hide colorbar
+            self.axis_aspect('equal')
         else:
             # Color image
             fig.add_trace(self.engine.go.Image(
@@ -339,6 +337,38 @@ class PlotlyFigure5(IFigure):
         fig.update_yaxes(visible=False)
 
         self._is_3d = False
+
+        return self
+
+
+    @override
+    def heatmap(self, data    : ArrayLike,
+                      cmap    : Colormap = 'jet',
+                      colorbar: ColormapMode = 'vertical') -> IFigure:
+        data = np.asarray(data)
+        assert data.ndim == 2 or data.shape[2] == 1, 'heatmap data must be 2D array or 3D array with one channel'
+
+        fig = self._fig
+
+        if colorbar == 'vertical':
+            cbar = dict(orientation='v')
+        elif colorbar == 'horizontal':
+            cbar = dict(orientation='h',
+                        y=-0.15,          # Position below the plot (negative values)
+                        xanchor='center', # Anchor point for x position
+                        yanchor='top',    # Anchor point for y position
+                        len=0.5)          # Length as fraction of plot width
+        else:
+            cbar = None
+
+        fig.add_trace(
+            self.engine.go.Heatmap(z=data, colorscale=cmap, colorbar=cbar)
+        )
+
+        fig.update_yaxes(autorange='reversed') # origin at top-left corner
+        self.axis_aspect('equal') # set equal aspect ratio for both axis
+        # show/hide colorbar
+        fig.update_traces(dict(showscale = colorbar != 'off'))
 
         return self
 
