@@ -10,6 +10,9 @@
 * `[engine.plotly]` Update `imshow()` to use `go.Heatmap` for improved greyscale visualization performance.
 * `[style.plotly]` Change default `dragmode` to `turntable` for 3D plots.
 
+#### Fixed
+* `[engine.plotly]` Remove empty space around 2d plot for `axis_aspect('equal')` mode.
+
 
 ## `[v0.8.5]` - 12.10.2025
 

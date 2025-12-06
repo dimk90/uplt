@@ -509,7 +509,10 @@ class PlotlyFigure5(IFigure):
             self._fig.update_scenes(aspectmode=aspectmode)
         else:
             scaleanchor = 'x' if mode == 'equal' else None
-            self._fig.update_yaxes(scaleanchor=scaleanchor)
+            self._fig.update_yaxes(scaleanchor=scaleanchor, scaleratio=1)
+            # Remove empty space around the plot when aspect ratio is equal
+            self._fig.update_xaxes(constrain='domain')
+            self._fig.update_yaxes(constrain='domain')
         return self
 
 
