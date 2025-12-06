@@ -3,6 +3,7 @@
 ## `[v0.9.0]` - TBD
 
 ### New
+* `[interface]` Add `cmap` to `imshow()` for colormap selection.
 * `[gallery]` Add marimo notebook for the gallery.
 
 #### Changed

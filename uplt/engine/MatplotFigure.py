@@ -315,7 +315,7 @@ class MatplotFigure(IFigure):
 
         return self
 
-    def imshow(self, image: ArrayLike, **kwargs) -> IFigure:
+    def imshow(self, image: ArrayLike, cmap: Colormap | None = None, **kwargs) -> IFigure:
         image = np.asarray(image)
 
         if 'vmin' in kwargs or 'vmax' in kwargs:
@@ -330,8 +330,9 @@ class MatplotFigure(IFigure):
             vmax = 1.0
 
         axis = self._init_axis(is_3d=False)
+        cmap = cmap or 'gray'
         axis.imshow(image,
-            cmap=kwargs.pop('cmap', self.engine.plt.get_cmap('gray')),
+            cmap=cmap,
             vmin=vmin, vmax=vmax,
             interpolation=kwargs.pop('interpolation', 'none')
         )
