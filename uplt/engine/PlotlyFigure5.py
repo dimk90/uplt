@@ -303,25 +303,34 @@ class PlotlyFigure5(IFigure):
         image = np.asarray(image)
         value_range = utool.image_range(image)
 
+        fig = self._fig
+
         if image.ndim == 2 or image.shape[2] == 1:
-            # workaround for a grayscale image
-            # https://github.com/plotly/plotly.py/issues/2885  # issuecomment-724679904
-            image = np.stack([image, image, image], axis=2)
+            # Grayscale image workaround from plotly devs
+            # https://github.com/plotly/plotly.py/issues/2885#issuecomment-724679904
+            fig.add_trace(self.engine.go.Heatmap(z=image, colorscale='gray'))
+            # constrain='domain' -> prevent the axes from being zoomed or panned beyond the plot domain
+            # scaleanchor='x' -> sets the same scale for x and y axis
+            # autorange='reversed' -> origin at top-left corner
+            fig.update_yaxes(autorange='reversed', scaleanchor='x', constrain='domain')
+            fig.update_xaxes(constrain='domain')
+            fig.update_traces(dict(showscale=False)) # hide colorbar
+        else:
+            # Color image
+            fig.add_trace(self.engine.go.Image(
+                z=image,
+                zmax=kwargs.pop('zmax', [value_range]*4),
+                zmin=kwargs.pop('zmin', [0]*4),
+                **kwargs,
+            ))
+
+        # Configure layout
+        fig.update_layout(margin=self.engine.go.layout.Margin(b=30, t=30, pad=0))
+        fig.update_layout(hovermode='closest')
+        fig.update_xaxes(visible=False)
+        fig.update_yaxes(visible=False)
 
         self._is_3d = False
-
-        self._fig.add_trace(self.engine.go.Image(
-            z=image,
-            zmax=kwargs.pop('zmax', [value_range]*4),
-            zmin=kwargs.pop('zmin', [0]*4),
-            **kwargs,
-        ))
-
-        # configure layout
-        self._fig.update_layout(margin=self.engine.go.layout.Margin(b=30, t=30))
-        self._fig.update_layout(hovermode='closest')
-        self._fig.update_xaxes(visible=False)
-        self._fig.update_yaxes(visible=False)
 
         return self
 

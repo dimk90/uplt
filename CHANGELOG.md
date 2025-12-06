@@ -6,6 +6,7 @@
 * `[gallery]` Add marimo notebook for the gallery.
 
 #### Changed
+* `[engine.plotly]` Update `imshow()` to use `go.Heatmap` for improved greyscale visualization performance.
 * `[style.plotly]` Change default `dragmode` to `turntable` for 3D plots.
 
 
