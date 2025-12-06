@@ -1,6 +1,13 @@
 from typing import Literal
 
 
+ColormapMode = Literal[
+    'off',
+    'vertical',
+    'horizontal'
+]
+
+
 AxisScale = Literal[
     'linear',
     'log',
@@ -52,7 +59,7 @@ MarkerStyle = Literal[
 """
 Common colormaps:
 - plotly: https://plotly.com/python/builtin-colorscales/
-- matplotlib: https://matplotlib.org/stable/users/explain/colors/colormaps.html  
+- matplotlib: https://matplotlib.org/stable/users/explain/colors/colormaps.html
 """
 Colormap = Literal[
     'magma',
