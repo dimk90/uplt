@@ -35,6 +35,7 @@ class PlotlyFigure5(IFigure):
     def is_3d(self) -> bool:
         return self._is_3d
 
+
     def __init__(self, engine: PlotlyEngine5):
         self._engine = engine
         self._color_scroller = ucolor.ColorScroller()
@@ -95,6 +96,7 @@ class PlotlyFigure5(IFigure):
                          **kwargs)
         return self
 
+
     def scatter(self, x           : ArrayLike,
                       y           : ArrayLike | None = None,
                       z           : ArrayLike | None = None,
@@ -140,6 +142,7 @@ class PlotlyFigure5(IFigure):
                          **kwargs)
         return self
 
+
     def hline(self, y           : float,
                     x_min       : float | None = None,
                     x_max       : float | None = None,
@@ -169,6 +172,7 @@ class PlotlyFigure5(IFigure):
                          legend_group=legend_group,
                          **kwargs)
 
+
     def vline(self, x           : float,
                     y_min       : float | None = None,
                     y_max       : float | None = None,
@@ -196,6 +200,7 @@ class PlotlyFigure5(IFigure):
                          opacity=opacity,
                          legend_group=legend_group,
                          **kwargs)
+
 
     def surface3d(self, x            : ArrayLike,
                         y            : ArrayLike | None = None,
@@ -258,6 +263,7 @@ class PlotlyFigure5(IFigure):
                               legendgrouptitle_text=legend_group if self._group_counter[legend_group] > 0 else None,
                               **kwargs)
         return self
+
 
     def bar(self, x           : ArrayLike,
                   y           : ArrayLike | None = None,
@@ -336,9 +342,11 @@ class PlotlyFigure5(IFigure):
 
         return self
 
+
     def title(self, text: str) -> IFigure:
         self._fig.update_layout(title=text)
         return self
+
 
     def legend(self, show: bool = True,
                      equal_marker_size: bool = True,
@@ -353,6 +361,7 @@ class PlotlyFigure5(IFigure):
             **kwargs,
         ))
         return self
+
 
     def grid(self, show: bool = True) -> IFigure:
         from uplt.engine.plotly.scale import get_scale
@@ -377,12 +386,14 @@ class PlotlyFigure5(IFigure):
         self._show_grid = show
         return self
 
+
     def xlabel(self, text: str) -> IFigure:
         if self.is_3d:
             self._fig.update_layout(scene=dict(xaxis_title=text))
         else:
             self._fig.update_xaxes(title=text)
         return self
+
 
     def ylabel(self, text: str) -> IFigure:
         if self.is_3d:
@@ -391,10 +402,12 @@ class PlotlyFigure5(IFigure):
             self._fig.update_yaxes(title=text)
         return self
 
+
     def zlabel(self, text: str) -> IFigure:
         if self.is_3d:
             self._fig.update_layout(scene=dict(zaxis_title=text))
         return self
+
 
     def xlim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
@@ -419,6 +432,7 @@ class PlotlyFigure5(IFigure):
             self._fig.update_xaxes(range=[min_value, max_value])
         return self
 
+
     def ylim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         from uplt.engine.plotly.axis_range import estimate_axis_range
@@ -442,6 +456,7 @@ class PlotlyFigure5(IFigure):
             self._fig.update_yaxes(range=[min_value, max_value])
         return self
 
+
     def zlim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         if not self.is_3d:
@@ -458,12 +473,14 @@ class PlotlyFigure5(IFigure):
         self._fig.update_layout(scene=dict(zaxis=dict(range=[min_value, max_value])))
         return self
 
+
     def xscale(self, scale: AxisScale, base: float = 10) -> IFigure:
         from uplt.engine.plotly.scale import set_scale
 
         set_scale(self._fig, 'x', scale=scale, base=base)
         self.grid(self._show_grid) # update grid if visible
         return self
+
 
     def yscale(self, scale: AxisScale, base: float = 10) -> IFigure:
         from uplt.engine.plotly.scale import set_scale
@@ -472,15 +489,19 @@ class PlotlyFigure5(IFigure):
         self.grid(self._show_grid) # update grid if visible
         return self
 
+
     def current_color(self) -> str:
         return self._color_scroller.current_color()
+
 
     def scroll_color(self, count: int=1) -> str:
         return self._color_scroller.scroll_color(count)
 
+
     def reset_color(self) -> IFigure:
         self._color_scroller.reset()
         return self
+
 
     def axis_aspect(self, mode: AspectMode) -> IFigure:
         if self.is_3d:
@@ -490,6 +511,7 @@ class PlotlyFigure5(IFigure):
             scaleanchor = 'x' if mode == 'equal' else None
             self._fig.update_yaxes(scaleanchor=scaleanchor)
         return self
+
 
     def as_image(self) -> ndarray:
         import io
@@ -504,6 +526,7 @@ class PlotlyFigure5(IFigure):
         image = image[..., :3] # RGBA -> RGB
         return image
 
+
     def save(self, filename: str | Path) -> IFigure:
         filename = Path(filename)
         if filename.suffix.lower() == '.html':
@@ -512,9 +535,11 @@ class PlotlyFigure5(IFigure):
             self._fig.write_image(filename, scale=self.FILE_RESOLUTION_SCALE)
         return self
 
+
     def close(self):
         self._fig.data = []
         self._fig.layout = {}
+
 
     def show(self, block: bool=True):
         if detect.is_marimo():
@@ -522,7 +547,9 @@ class PlotlyFigure5(IFigure):
             return self.internal
         self.engine.pio.show(self._fig)
 
+
     ## Protected ##
+
 
     def _update_group_counter(self, plot_name: str | None, legend_group: str | None):
         """
