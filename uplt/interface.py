@@ -352,7 +352,7 @@ class IFigure(Protocol):
         """
 
     @abstract
-    def imshow(self, image: ArrayLike, **kwargs) -> IFigure:
+    def imshow(self, image: ArrayLike, cmap: Colormap | None = None, **kwargs) -> IFigure:
         """
         Display an image.
 
@@ -360,6 +360,9 @@ class IFigure(Protocol):
         ----------
         image : ArrayLike
             Image data. Supported ranges: double [0, 1], uint8, uint16.
+
+        cmap : Colormap or None, optional
+            Colormap for single channel images. The 'gray' colormap is used by default.
 
         kwargs : dict
             Other keyword arguments are forwarded to the underlying engine.
