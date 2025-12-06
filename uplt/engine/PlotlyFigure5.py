@@ -299,7 +299,8 @@ class PlotlyFigure5(IFigure):
                           **kwargs)
         return self
 
-    def imshow(self, image: ArrayLike, **kwargs) -> IFigure:
+
+    def imshow(self, image: ArrayLike, cmap: Colormap | None = None, **kwargs) -> IFigure:
         image = np.asarray(image)
         value_range = utool.image_range(image)
 
@@ -308,7 +309,8 @@ class PlotlyFigure5(IFigure):
         if image.ndim == 2 or image.shape[2] == 1:
             # Grayscale image workaround from plotly devs
             # https://github.com/plotly/plotly.py/issues/2885#issuecomment-724679904
-            fig.add_trace(self.engine.go.Heatmap(z=image, colorscale='gray'))
+            cmap = cmap or 'gray'
+            fig.add_trace(self.engine.go.Heatmap(z=image, colorscale=cmap))
             # constrain='domain' -> prevent the axes from being zoomed or panned beyond the plot domain
             # scaleanchor='x' -> sets the same scale for x and y axis
             # autorange='reversed' -> origin at top-left corner
