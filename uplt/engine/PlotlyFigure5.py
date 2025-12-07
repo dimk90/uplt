@@ -346,7 +346,8 @@ class PlotlyFigure5(IFigure):
                       cmap    : Colormap = 'jet',
                       colorbar: ColormapMode = 'vertical') -> IFigure:
         data = np.asarray(data)
-        assert data.ndim == 2 or data.shape[2] == 1, 'heatmap data must be 2D array or 3D array with one channel'
+        assert data.ndim == 2 or data.shape[2] == 1, \
+               'heatmap data must be 2D array or 3D array with one channel'
 
         fig = self._fig
 

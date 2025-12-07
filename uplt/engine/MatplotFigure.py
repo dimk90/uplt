@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import numpy as np
-from typing import Any
 from pathlib import Path
 from numpy import ndarray
+from typing import Any, override
 from numpy.typing import ArrayLike
 from collections.abc import Sequence
 
@@ -12,10 +12,12 @@ import uplt.utool as utool
 import uplt.plugin as plugin
 import uplt.detect as detect
 
-from uplt.interface import IFigure, LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
-from uplt.engine.MatplotEngine import MatplotEngine
-from uplt.utool import Interpolator
 from uplt.default import DEFAULT
+from uplt.interface import IFigure
+from uplt.utool import Interpolator
+from uplt.engine.MatplotEngine import MatplotEngine
+from uplt.interface import Colormap, ColormapMode
+from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale
 
 
 class MatplotFigure(IFigure):
@@ -351,6 +353,29 @@ class MatplotFigure(IFigure):
         axis.get_xaxis().set_visible(False)
         axis.get_yaxis().set_visible(False)
         axis.set_frame_on(False)
+
+        return self
+
+
+    @override
+    def heatmap(self, data    : ArrayLike,
+                      cmap    : Colormap = 'jet',
+                      colorbar: ColormapMode = 'vertical') -> IFigure:
+        data = np.asarray(data)
+        assert data.ndim == 2 or data.shape[2] == 1, \
+               'heatmap data must be 2D array or 3D array with one channel'
+
+        axis = self._init_axis(is_3d=False)
+        fig = self._fig
+        assert fig is not None
+
+        img = axis.imshow(data, cmap=cmap, vmin=data.min(), vmax=data.max())
+
+        axis.grid(visible=False) # hide grid
+        axis.xaxis.tick_top()    # move x-axis to top
+
+        if colorbar != 'off':
+            fig.colorbar(img, orientation=colorbar, pad=0.01)
 
         return self
 
