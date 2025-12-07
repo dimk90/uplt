@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import numpy as np
-from numpy import ndarray
-from numpy.typing import ArrayLike
-from typing import Any, override
 from pathlib import Path
+from numpy import ndarray
+from typing import Any, override
+from numpy.typing import ArrayLike
 from collections.abc import Sequence
 
 import uplt.color as ucolor
@@ -15,8 +15,8 @@ import uplt.detect as detect
 from uplt.interface import IFigure
 from uplt.utool import Interpolator
 from uplt.engine.PlotlyEngine5 import PlotlyEngine5
-from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale
 from uplt.interface import Colormap, ColormapMode
+from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale
 
 
 class PlotlyFigure5(IFigure):
@@ -365,10 +365,11 @@ class PlotlyFigure5(IFigure):
             self.engine.go.Heatmap(z=data, colorscale=cmap, colorbar=cbar)
         )
 
-        fig.update_yaxes(autorange='reversed') # origin at top-left corner
         self.axis_aspect('equal') # set equal aspect ratio for both axis
-        # show/hide colorbar
-        fig.update_traces(dict(showscale = colorbar != 'off'))
+        fig.update_yaxes(autorange='reversed') # origin at top-left corner
+        fig.update_layout(margin=self.engine.go.layout.Margin(b=30, t=50, pad=0))
+        fig.update_layout(xaxis=dict(side='top')) # move x-axis to top
+        fig.update_traces(dict(showscale = colorbar != 'off')) # show/hide colorbar
 
         return self
 
