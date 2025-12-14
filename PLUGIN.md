@@ -54,7 +54,7 @@ plugin.register(pd.DataFrame, handler=DataFramePlugin())
 
 ## Advanced Plugin Example
 
-While `extract_data` handles the raw values, the `update_style` method gives you fine-grained control over how those values are presented. This allows for dynamic behavior based on the plotting context (e.g. the current data index, total number of datasets, or user-provided arguments).  
+While `extract_data` handles the raw values, the `update_style` method gives you fine-grained control over how those values are presented. This allows for dynamic behavior based on the plotting context (e.g. the current data index, total number of datasets, or user-provided arguments).
 The example below demonstrates a smart legend implementation. When a user creates a plot with a specific uniform color (e.g. `color='green'`), it is redundant to list every column in the legend individually. Instead, this plugin:
 - Detects "Single Color Mode": Checks if a color argument is present.
 - Merges Labels: Joins all column names into a single string (stored in `self._joined_name`).

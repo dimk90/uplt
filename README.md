@@ -159,7 +159,7 @@ pip install "uplt-py[matplot]"
 
 ## Plugin System
 
-`uplt` is designed to be extensible. You can register `plugins` to visualize  custom objects via `plot()` or `scatter()` functions.  
+`uplt` is designed to be extensible. You can register `plugins` to visualize  custom objects via `plot()` or `scatter()` functions. 
 E.g. if plugin for `pd.DataFrame` is registered, you can plot DataFrame columns directly:
 
 ```python
