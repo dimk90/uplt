@@ -1,9 +1,9 @@
 # Changelog
 
-## `[v0.9.0]` - TBD
+## `[v0.9.0]` - 14.12.2025
 
 ### New
-* `[interface]` Add `heatmap()` to the figure API.
+* `[interface]` Add `heatmap()` to the figure API. See [gallery](gallery/gallery.md).
 * `[interface]` Add `cmap` to `imshow()` for colormap selection.
 * `[gallery]` Add marimo notebook for the gallery.
 
@@ -11,6 +11,7 @@
 * `[engine.plotly]` Update `imshow()` to use `go.Heatmap` for improved greyscale visualization performance.
 * `[style.plotly]` Change default `dragmode` to `turntable` for 3D plots.
 * `[ci]` Remove upper version limit for `pillow`.
+* `[doc]` Update gallery with `heatmap()` and `imshow()` examples.
 
 #### Fixed
 * `[engine.plotly]` Remove empty space around 2d plot for `axis_aspect('equal')` mode.
