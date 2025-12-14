@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.18.1"
+__generated_with = "0.18.3"
 app = marimo.App(width="medium")
 
 
@@ -28,6 +28,12 @@ def _():
 def _():
     import marimo as mo
     return (mo,)
+
+
+@app.cell(hide_code=True)
+def _():
+    from pathlib import Path
+    return (Path,)
 
 
 @app.cell(hide_code=True)
@@ -250,7 +256,6 @@ def _(engine, uplt):
     uplt.figure(engine.value)
         .surface3d(_x_, _y_, _z_, name='data #1', colormap='hsv', opacity=0.5, show_colormap=True)
         .surface3d(_x_, _y_, _z_, name='data #2',  interpolation='linear', show_colormap=True)
-        .title('3D Test')
         .xlabel('X Axis')
         .ylabel('Y Axis')
         .zlabel('Z Axis')
@@ -392,6 +397,7 @@ def _(engine, np, uplt):
     _x_ = np.arange(8)
     _y_ = np.arange(8)
 
+
     (
     uplt.figure(engine.value)
         .scatter(_x_, _y_, marker_style='.', marker_size=1, name='data #1', legend_group='Small')
@@ -402,6 +408,82 @@ def _(engine, np, uplt):
         .legend(True, equal_marker_size=True)
         .show()
     )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    # heatmap
+    """)
+    return
+
+
+@app.cell
+def _(engine, mo, np, uplt):
+    # Generate heatmap for visualization
+    _range_ = np.linspace(-10, 10, num=101, endpoint=True)
+    _xx_, _yy_ = np.meshgrid(_range_, _range_, indexing='xy')
+    _z_ = _xx_**3 + _yy_**3
+
+
+    mo.vstack([
+        mo.hstack([ mo.md('## Vertical Colorbar'), mo.md('## Horizontal Colorbar') ],  justify='space-around'),
+
+        mo.hstack([
+            uplt.figure(engine.value, width=400, aspect_ratio=0.8).heatmap(_z_, colorbar='vertical').show(),
+            uplt.figure(engine.value, width=500, aspect_ratio=0.8).heatmap(_z_, colorbar='horizontal').show(),
+        ])
+    ])
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    # imshow
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _():
+    from PIL import Image
+    return (Image,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Color Image
+    """)
+    return
+
+
+@app.cell
+def _(Image, Path, engine, np, uplt):
+    _image_ = Image.open(Path(__file__).parent.parent / 'logo.png')
+    _image_ = np.array(_image_)
+
+
+    uplt.figure(engine.value, width=250).imshow(_image_).show()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ## Grayscale Image
+    """)
+    return
+
+
+@app.cell
+def _(Image, Path, engine, uplt):
+    _image_ = Image.open(Path(__file__).parent.parent / 'logo.png').convert('L')
+
+
+    uplt.figure(engine.value, width=250).imshow(_image_).show()
     return
 
 
