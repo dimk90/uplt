@@ -1,6 +1,6 @@
 # Gallery
 > [!TIP]
-> See also gallery demo for jupyter and marimo: `gallery.ipynb` and `gallery.py` .
+> See gallery demos for jupyter and marimo: `gallery.ipynb` and `gallery.py` .
 
 ## plot
 
@@ -39,7 +39,7 @@ x = np.linspace(0, np.pi*4, num=100)
 y1 = np.sin(x)
 y2 = np.sin(x - np.pi/4)
 
-fig = uplt.figure(engine='plotly5')
+fig = uplt.figure('plotly')
 fig.plot(x=y1, y=y2, z=x, name='data #1')
 fig.plot(x=y1, y=y2, z=x+2, name='data #2')
 fig.plot(x=y1, y=y2, z=x+4, name='data #1')
@@ -64,7 +64,7 @@ y = np.random.uniform(size=100)
 rgb_colors = np.random.uniform(low=0.3, high=0.8, size=[100, 3])
 
 # plot
-fig = uplt.figure(engine='plotly5')
+fig = uplt.figure('plotly')
 fig.scatter(x, y)
 fig.show()
 ```
@@ -106,7 +106,7 @@ y = np.sin(z - np.pi/4)
 
 rgb_colors = np.random.uniform(low=0.1, high=0.9, size=[100, 3])
 
-fig = uplt.figure(engine='plotly5')
+fig = uplt.figure('plotly')
 fig.scatter(x, y, z, color=uplt.color.rgb_to_str(rgb_colors))
 fig.show()
 ```
@@ -159,7 +159,7 @@ fig.show()
 x = np.linspace(0, 100000, num=1000)
 y = np.sqrt(x)
 
-fig = uplt.figure(engine)
+fig = uplt.figure('plotly')
 fig.plot(x, y, name='sqrt(x)')
 fig.xscale('log', base=10)
 fig.yscale('log', base=10)
@@ -191,6 +191,52 @@ fig.show()
 ```
 
 <img src='asset/legend.png' width='700'>
+
+
+# Heatmap
+
+```python
+data_range = np.linspace(-10, 10, num=101, endpoint=True)
+xx, yy = np.meshgrid(data_range, data_range, indexing='xy')
+z = xx**3 + yy**3
+
+fig = uplt.figure('plotly', width=400, aspect_ratio=0.8)
+fig.heatmap(z, colorbar='vertical')
+fig.show()
+```
+
+<img src='asset/heatmap.png' width='400'>
+
+
+# imshow
+
+## Color Image
+
+```python
+from PIL import Image
+
+image = Image.open('../logo.png')
+image = np.array(image)
+
+uplt.figure(engine, width=250).imshow(image).show()
+```
+
+<img src='asset/imshow.png' width='200'>
+
+
+## Grayscale Image
+
+```python
+from PIL import Image
+
+image = Image.open('../logo.png').convert('L')
+image = np.array(image)
+
+uplt.figure(engine, width=250).imshow(image).show()
+```
+
+<img src='asset/imshow-gray.png' width='200'>
+
 
 # Plugin
 
