@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import numpy as np
-from numpy import ndarray
-from numpy.typing import ArrayLike
-from typing import Any
 from pathlib import Path
+from numpy import ndarray
+from typing import Any, override
+from numpy.typing import ArrayLike
 from collections.abc import Sequence
 
 import uplt.color as ucolor
@@ -15,7 +15,8 @@ import uplt.detect as detect
 from uplt.interface import IFigure
 from uplt.utool import Interpolator
 from uplt.engine.PlotlyEngine5 import PlotlyEngine5
-from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
+from uplt.interface import Colormap, ColormapMode
+from uplt.interface import LineStyle, MarkerStyle, AspectMode, AxisScale
 
 
 class PlotlyFigure5(IFigure):
@@ -34,6 +35,7 @@ class PlotlyFigure5(IFigure):
     @property
     def is_3d(self) -> bool:
         return self._is_3d
+
 
     def __init__(self, engine: PlotlyEngine5):
         self._engine = engine
@@ -95,6 +97,7 @@ class PlotlyFigure5(IFigure):
                          **kwargs)
         return self
 
+
     def scatter(self, x           : ArrayLike,
                       y           : ArrayLike | None = None,
                       z           : ArrayLike | None = None,
@@ -140,6 +143,7 @@ class PlotlyFigure5(IFigure):
                          **kwargs)
         return self
 
+
     def hline(self, y           : float,
                     x_min       : float | None = None,
                     x_max       : float | None = None,
@@ -169,6 +173,7 @@ class PlotlyFigure5(IFigure):
                          legend_group=legend_group,
                          **kwargs)
 
+
     def vline(self, x           : float,
                     y_min       : float | None = None,
                     y_max       : float | None = None,
@@ -196,6 +201,7 @@ class PlotlyFigure5(IFigure):
                          opacity=opacity,
                          legend_group=legend_group,
                          **kwargs)
+
 
     def surface3d(self, x            : ArrayLike,
                         y            : ArrayLike | None = None,
@@ -259,6 +265,7 @@ class PlotlyFigure5(IFigure):
                               **kwargs)
         return self
 
+
     def bar(self, x           : ArrayLike,
                   y           : ArrayLike | None = None,
                   name        : str | None = None,
@@ -299,35 +306,79 @@ class PlotlyFigure5(IFigure):
                           **kwargs)
         return self
 
-    def imshow(self, image: ArrayLike, **kwargs) -> IFigure:
+
+    def imshow(self, image: ArrayLike, cmap: Colormap | None = None, **kwargs) -> IFigure:
         image = np.asarray(image)
         value_range = utool.image_range(image)
 
+        fig = self._fig
+
         if image.ndim == 2 or image.shape[2] == 1:
-            # workaround for a grayscale image
-            # https://github.com/plotly/plotly.py/issues/2885  # issuecomment-724679904
-            image = np.stack([image, image, image], axis=2)
+            # Grayscale image workaround from plotly devs
+            # https://github.com/plotly/plotly.py/issues/2885#issuecomment-724679904
+            cmap = cmap or 'gray'
+            fig.add_trace(self.engine.go.Heatmap(z=image, colorscale=cmap))
+            fig.update_yaxes(autorange='reversed')   # origin at top-left corner
+            fig.update_traces(dict(showscale=False)) # hide colorbar
+            self.axis_aspect('equal')
+        else:
+            # Color image
+            fig.add_trace(self.engine.go.Image(
+                z=image,
+                zmax=kwargs.pop('zmax', [value_range]*4),
+                zmin=kwargs.pop('zmin', [0]*4),
+                **kwargs,
+            ))
+
+        # Configure layout
+        fig.update_layout(margin=self.engine.go.layout.Margin(b=30, t=30, pad=0))
+        fig.update_layout(hovermode='closest')
+        fig.update_xaxes(visible=False)
+        fig.update_yaxes(visible=False)
 
         self._is_3d = False
 
-        self._fig.add_trace(self.engine.go.Image(
-            z=image,
-            zmax=kwargs.pop('zmax', [value_range]*4),
-            zmin=kwargs.pop('zmin', [0]*4),
-            **kwargs,
-        ))
+        return self
 
-        # configure layout
-        self._fig.update_layout(margin=self.engine.go.layout.Margin(b=30, t=30))
-        self._fig.update_layout(hovermode='closest')
-        self._fig.update_xaxes(visible=False)
-        self._fig.update_yaxes(visible=False)
+
+    @override
+    def heatmap(self, data    : ArrayLike,
+                      cmap    : Colormap = 'jet',
+                      colorbar: ColormapMode = 'vertical') -> IFigure:
+        data = np.asarray(data)
+        assert data.ndim == 2 or data.shape[2] == 1, \
+               'heatmap data must be 2D array or 3D array with one channel'
+
+        fig = self._fig
+
+        if colorbar == 'vertical':
+            cbar = dict(orientation='v')
+        elif colorbar == 'horizontal':
+            cbar = dict(orientation='h',
+                        y=-0.15,          # Position below the plot (negative values)
+                        xanchor='center', # Anchor point for x position
+                        yanchor='top',    # Anchor point for y position
+                        len=0.5)          # Length as fraction of plot width
+        else:
+            cbar = None
+
+        fig.add_trace(
+            self.engine.go.Heatmap(z=data, colorscale=cmap, colorbar=cbar)
+        )
+
+        self.axis_aspect('equal') # set equal aspect ratio for both axis
+        fig.update_yaxes(autorange='reversed') # origin at top-left corner
+        fig.update_layout(margin=self.engine.go.layout.Margin(b=30, t=50, pad=0))
+        fig.update_layout(xaxis=dict(side='top')) # move x-axis to top
+        fig.update_traces(dict(showscale = colorbar != 'off')) # show/hide colorbar
 
         return self
+
 
     def title(self, text: str) -> IFigure:
         self._fig.update_layout(title=text)
         return self
+
 
     def legend(self, show: bool = True,
                      equal_marker_size: bool = True,
@@ -342,6 +393,7 @@ class PlotlyFigure5(IFigure):
             **kwargs,
         ))
         return self
+
 
     def grid(self, show: bool = True) -> IFigure:
         from uplt.engine.plotly.scale import get_scale
@@ -366,12 +418,14 @@ class PlotlyFigure5(IFigure):
         self._show_grid = show
         return self
 
+
     def xlabel(self, text: str) -> IFigure:
         if self.is_3d:
             self._fig.update_layout(scene=dict(xaxis_title=text))
         else:
             self._fig.update_xaxes(title=text)
         return self
+
 
     def ylabel(self, text: str) -> IFigure:
         if self.is_3d:
@@ -380,10 +434,12 @@ class PlotlyFigure5(IFigure):
             self._fig.update_yaxes(title=text)
         return self
 
+
     def zlabel(self, text: str) -> IFigure:
         if self.is_3d:
             self._fig.update_layout(scene=dict(zaxis_title=text))
         return self
+
 
     def xlim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
@@ -408,6 +464,7 @@ class PlotlyFigure5(IFigure):
             self._fig.update_xaxes(range=[min_value, max_value])
         return self
 
+
     def ylim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         from uplt.engine.plotly.axis_range import estimate_axis_range
@@ -431,6 +488,7 @@ class PlotlyFigure5(IFigure):
             self._fig.update_yaxes(range=[min_value, max_value])
         return self
 
+
     def zlim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         if not self.is_3d:
@@ -447,12 +505,14 @@ class PlotlyFigure5(IFigure):
         self._fig.update_layout(scene=dict(zaxis=dict(range=[min_value, max_value])))
         return self
 
+
     def xscale(self, scale: AxisScale, base: float = 10) -> IFigure:
         from uplt.engine.plotly.scale import set_scale
 
         set_scale(self._fig, 'x', scale=scale, base=base)
         self.grid(self._show_grid) # update grid if visible
         return self
+
 
     def yscale(self, scale: AxisScale, base: float = 10) -> IFigure:
         from uplt.engine.plotly.scale import set_scale
@@ -461,15 +521,19 @@ class PlotlyFigure5(IFigure):
         self.grid(self._show_grid) # update grid if visible
         return self
 
+
     def current_color(self) -> str:
         return self._color_scroller.current_color()
+
 
     def scroll_color(self, count: int=1) -> str:
         return self._color_scroller.scroll_color(count)
 
+
     def reset_color(self) -> IFigure:
         self._color_scroller.reset()
         return self
+
 
     def axis_aspect(self, mode: AspectMode) -> IFigure:
         if self.is_3d:
@@ -477,8 +541,12 @@ class PlotlyFigure5(IFigure):
             self._fig.update_scenes(aspectmode=aspectmode)
         else:
             scaleanchor = 'x' if mode == 'equal' else None
-            self._fig.update_yaxes(scaleanchor=scaleanchor)
+            self._fig.update_yaxes(scaleanchor=scaleanchor, scaleratio=1)
+            # Remove empty space around the plot when aspect ratio is equal
+            self._fig.update_xaxes(constrain='domain')
+            self._fig.update_yaxes(constrain='domain')
         return self
+
 
     def as_image(self) -> ndarray:
         import io
@@ -493,6 +561,7 @@ class PlotlyFigure5(IFigure):
         image = image[..., :3] # RGBA -> RGB
         return image
 
+
     def save(self, filename: str | Path) -> IFigure:
         filename = Path(filename)
         if filename.suffix.lower() == '.html':
@@ -501,9 +570,11 @@ class PlotlyFigure5(IFigure):
             self._fig.write_image(filename, scale=self.FILE_RESOLUTION_SCALE)
         return self
 
+
     def close(self):
         self._fig.data = []
         self._fig.layout = {}
+
 
     def show(self, block: bool=True):
         if detect.is_marimo():
@@ -511,7 +582,9 @@ class PlotlyFigure5(IFigure):
             return self.internal
         self.engine.pio.show(self._fig)
 
+
     ## Protected ##
+
 
     def _update_group_counter(self, plot_name: str | None, legend_group: str | None):
         """

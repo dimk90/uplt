@@ -5,10 +5,10 @@
 <br>
 
 [![python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://docs.python.org/3/whatsnew/3.10.html)
-[![jupyter](https://img.shields.io/badge/Jupyter-Lab-F37626.svg?style=flat&logo=Jupyter)](https://jupyterlab.readthedocs.io/en/stable)
-[![marimo](https://img.shields.io/badge/🌊%20%20🍃-marimo-1C7361)](https://marimo.io/)
-[![license](https://img.shields.io/badge/License-BSD%203--Clause-green)](https://choosealicense.com/licenses/mit/)
 [![PyPI - Version](https://img.shields.io/pypi/v/uplt-py)](https://pypi.org/project/uplt-py)
+[![marimo](https://img.shields.io/badge/🌊%20%20🍃-marimo-1C7361)](https://marimo.io/)
+[![jupyter](https://img.shields.io/badge/Jupyter-Lab-F37626.svg?style=flat&logo=Jupyter)](https://jupyterlab.readthedocs.io/en/stable)
+[![license](https://img.shields.io/badge/License-BSD%203--Clause-green)](https://choosealicense.com/licenses/mit/)
 
 Unified API and style for Python plotting libraries.
 
@@ -83,9 +83,9 @@ fig.legend().show()
 </tr>
 </table>
 
-> 💡 See [gallery](https://github.com/makarovdi/uplt/blob/main/gallery/gallery.md) for more examples.  
+> [!TIP] 
+> See [gallery](https://github.com/makarovdi/uplt/blob/main/gallery/gallery.md) for more examples.  
 
-> 💡 The `uplot` alias is available and can be used interchangeably with `uplt`.
 
 ## Install
 
@@ -102,7 +102,8 @@ If you need only `matplotlib` support:
 ```bash
 pip install "uplt-py[matplot]"
 ```
-> 💡  Replace `[matplot]` with `[plotly]` for plotly-only installation
+> [!TIP]
+> Replace `[matplot]` with `[plotly]` for plotly-only installation
 
 
 ## Plotting Libs - Pros & Cons
@@ -140,6 +141,7 @@ pip install "uplt-py[matplot]"
 | `surface3d(x, y, z)`                                                | Plot a surface in 3D space where the color scale corresponds to the z-values.                                                                                 |
 | `bar(x, y)`                                                         | Create a bar plot.                                                                                                                                            |
 | `imshow(image)`                                                     | Display an image.                                                                                                                                             |
+| `heatmap(data)`                                                     | Display 2D heatmap with colorbar.                                                                                                                             |
 | `hline(y)` <br/> `vline(x)`                                         | Plot horizontal or vertical line. `2D only`                                                                                                                   |
 | `title(text)`                                                       | Set the title of the figure.                                                                                                                                  |
 | `legend(show)`                                                      | Show or hide the legend on the figure.                                                                                                                        |
@@ -155,81 +157,28 @@ pip install "uplt-py[matplot]"
 | `show(block)`                                                       | Display the figure.                                                                                                                                           |
 
 
-## Extending
+## Plugin System
 
+`uplt` is designed to be extensible. You can register `plugins` to visualize  custom objects via `plot()` or `scatter()` functions. 
+E.g. if plugin for `pd.DataFrame` is registered, you can plot DataFrame columns directly:
 
-### Plugin
-
-The plugin system allows extending `uplt` for visualizing custom objects.
-For example, the `DataFrame` plugin enables this code:
 ```python
 import uplt
 import pandas as pd
 
-car_crashes = pd.read_csv(
-    'https://raw.githubusercontent.com/mwaskom/seaborn-data/master/car_crashes.csv'
-)
+df = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/car_crashes.csv')
 
 fig = uplt.figure()
-fig.plot(car_crashes[['total', 'speeding', 'alcohol', 'no_previous']])
+fig.plot(df[['total', 'speeding', 'alcohol']])
 fig.show()
 ```
+
 <picture align="left">
     <img src='https://media.githubusercontent.com/media/dimk90/uplt/refs/heads/main/gallery/asset/plugin.png' width='480'>
 </picture>
 
-
-To implement the plugin, you can follow this structure:
-```python
-import numpy as np
-import pandas as pd
-
-import uplt.plugin as plugin
-
-
-class DataFramePlugin(plugin.IPlotPlugin):
-
-    def extract_data(self, obj: pd.DataFrame) -> list[plugin.PlotData]:
-        data = []
-        for name in obj.columns:
-            if not np.issubdtype(obj.dtypes[name], np.number): continue
-            y = obj[name].values
-            x = np.arange(len(y))
-            data.append(plugin.PlotData(x=x, y=y, name=name.replace('_', ' ').title()))
-        return data
-
-plugin.register(pd.DataFrame, handler=DataFramePlugin())
-```
-
-> 💡 Check `test/plugin.py` for a more advanced plugin example.
-
-### Engine
-
-Adding a new plotting library is straightforward. Implement two interfaces `IPlotEngine` and `IFigure`:
-```python
-import uplt
-from uplt import IPlotEngine, IFigure
-
-class MyEngine(IPlotEngine):
-    ...
-    def figure(self, ...) -> MyFigure: ...
-
-class MyFigure(IFigure):
-    def plot(self, ...): ...
-    def scatter(self, ...): ...
-    ...
-
-# register the engine
-uplt.engine.register(MyEngine(), name='test')
-```
-Then use it in the regular way:
-```python
-import uplt
-
-fig = uplt.figure(engine='test')
-fig.plot(...)
-fig.show()
-```
+> [!TIP]
+> For detailed instructions on creating plugins, please see [PLUGIN.md](https://github.com/makarovdi/uplt/blob/main/PLUGIN.md).
 
 ## Dependencies
 
@@ -246,7 +195,3 @@ fig.show()
 
 This software is licensed under the `BSD-3-Clause` license.
 See the [LICENSE](https://github.com/makarovdi/uplt/blob/main/LICENSE) file for details.
-
-## TODO
-
-Check the plan for new features [here](https://github.com/makarovdi/uplt/blob/develop/TODO.md).

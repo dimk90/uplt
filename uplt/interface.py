@@ -5,10 +5,11 @@ from pathlib import Path
 from numpy.typing import ArrayLike
 from collections.abc import Sequence
 from abc import abstractmethod as abstract
-from typing import Any, Protocol, runtime_checkable
+from typing import Literal, Any, Protocol, runtime_checkable
 
 from uplt.utool import Interpolator
-from uplt.utype import LineStyle, MarkerStyle, AspectMode, AxisScale, Colormap
+from uplt.utype import LineStyle, MarkerStyle, AspectMode, AxisScale
+from uplt.utype import Colormap, ColormapMode
 
 
 @runtime_checkable
@@ -287,7 +288,7 @@ class IFigure(Protocol):
             Whether the colormap should be visualized as a bar alongside the plot.
 
         colormap : Colormap, optional
-            A palette name string.
+            The colormap for the surface.
 
         opacity : float, optional
             Sets the opacity of the surface.
@@ -352,7 +353,7 @@ class IFigure(Protocol):
         """
 
     @abstract
-    def imshow(self, image: ArrayLike, **kwargs) -> IFigure:
+    def imshow(self, image: ArrayLike, cmap: Colormap | None = None, **kwargs) -> IFigure:
         """
         Display an image.
 
@@ -361,8 +362,33 @@ class IFigure(Protocol):
         image : ArrayLike
             Image data. Supported ranges: double [0, 1], uint8, uint16.
 
+        cmap : Colormap or None, optional
+            Colormap for single channel images. The 'gray' colormap is used by default.
+
         kwargs : dict
             Other keyword arguments are forwarded to the underlying engine.
+
+        Returns
+        -------
+        IFigure
+            The figure object representing the plot.
+        """
+
+    @abstract
+    def heatmap(self, data    : ArrayLike,
+                      cmap    : Colormap = 'jet',
+                      colorbar: ColormapMode = 'vertical') -> IFigure:
+        """
+        Display a 2d heatmap.
+
+        Parameters
+        ----------
+        data : ArrayLike
+            2D array of values to display as a heatmap.
+            The values range is arbitrary.
+
+        colorbar : {'off', 'vertical', 'horizontal'}, optional
+            Colorbar position. Default is 'vertical'.
 
         Returns
         -------

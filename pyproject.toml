@@ -1,7 +1,7 @@
 [project]
 name = "uplt-py"
 description = "Unified API and style for Python plotting libraries"
-version = "0.8.5"
+version = "0.9.0"
 authors = [
     { name = "Dmitry Makarov", email="makarovdmv@gmail.com" },
 ]
@@ -18,7 +18,7 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
     "numpy   >= 1.21, < 3.0",  # 1.21: ArrayLike and extended annotations: https://numpy.org/devdocs/reference/typing.html
-    "pillow  >= 11.3, < 12.0", # versions < 11.3 are vulnerable: https://security.snyk.io/package/pip/pillow
+    "pillow  >= 11.3", # versions < 11.3 are vulnerable: https://security.snyk.io/package/pip/pillow
     "scipy   >= 1.11, < 2.0",
 ]
 
