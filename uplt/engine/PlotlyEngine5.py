@@ -1,4 +1,5 @@
 import importlib.util
+from typing_extensions import override # Python 3.12 feature
 from uplt.interface import IPlotEngine, IFigure
 from uplt.default import DEFAULT
 
@@ -6,10 +7,12 @@ from uplt.default import DEFAULT
 class PlotlyEngine5(IPlotEngine):
 
     @property
+    @override
     def name(self) -> str:
         return 'plotly'
 
     @classmethod
+    @override
     def is_available(cls) -> bool:
         return importlib.util.find_spec('plotly') is not None
 
@@ -37,6 +40,7 @@ class PlotlyEngine5(IPlotEngine):
             raise NotImplementedError(f'style not supported for plotly: {DEFAULT.style}')
 
 
+    @override
     def figure(self, width: int, aspect_ratio: float) -> IFigure:
         from uplt.engine.PlotlyFigure5 import PlotlyFigure5
         fig = PlotlyFigure5(engine=self) # type: ignore

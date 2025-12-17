@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 from pathlib import Path
 from numpy import ndarray
-from typing import Any, override
+from typing import Any
+from typing_extensions import override # Python 3.12 feature
 from numpy.typing import ArrayLike
 from collections.abc import Sequence
 
@@ -26,16 +27,18 @@ class MatplotFigure(IFigure):
     SAVING_DPI = SHOWING_DPI * 2
     LEGEND_MARKER_SIZE = 8
 
-
     @property
+    @override
     def engine(self) -> MatplotEngine:
         return self._engine
 
     @property
+    @override
     def internal(self) -> Any | None:
         return self._fig
 
     @property
+    @override
     def is_3d(self) -> bool:
         assert self._is_3d is not None, 'axis must be initialized'
         return self._is_3d
@@ -61,6 +64,7 @@ class MatplotFigure(IFigure):
         self._bars = [ ]
 
 
+    @override
     def plot(self, x           : ArrayLike,
                    y           : ArrayLike | None = None,
                    z           : ArrayLike | None = None,
@@ -107,6 +111,7 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def scatter(self, x           : ArrayLike,
                       y           : ArrayLike | None = None,
                       z           : ArrayLike | None = None,
@@ -150,6 +155,7 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def hline(self, y           : float,
                     x_min       : float | None = None,
                     x_max       : float | None = None,
@@ -178,6 +184,7 @@ class MatplotFigure(IFigure):
                          **kwargs)
 
 
+    @override
     def vline(self, x           : float,
                     y_min       : float | None = None,
                     y_max       : float | None = None,
@@ -205,6 +212,7 @@ class MatplotFigure(IFigure):
                          **kwargs)
 
 
+    @override
     def surface3d(self, x            : ArrayLike | Any,
                         y            : ArrayLike | None = None,
                         z            : ArrayLike | None = None,
@@ -268,6 +276,7 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def bar(self, x           : ArrayLike,
                   y           : ArrayLike | None = None,
                   name        : str | None = None,
@@ -326,6 +335,7 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def imshow(self, image: ArrayLike, cmap: Colormap | None = None, **kwargs) -> IFigure:
         image = np.asarray(image)
 
@@ -380,11 +390,13 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def title(self, text: str) -> IFigure:
         self._axis.set_title(label=text)
         return self
 
 
+    @override
     def legend(self, show: bool = True,
                      equal_marker_size: bool = True,
                      **kwargs) -> IFigure:
@@ -433,21 +445,25 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def grid(self, show: bool = True) -> IFigure:
         self._axis.grid(visible=show, which='both')
         return self
 
 
+    @override
     def xlabel(self, text: str) -> IFigure:
         self._axis.set_xlabel(xlabel=text)
         return self
 
 
+    @override
     def ylabel(self, text: str) -> IFigure:
         self._axis.set_ylabel(ylabel=text)
         return self
 
 
+    @override
     def zlabel(self, text: str) -> IFigure:
         if self.is_3d:
             from mpl_toolkits.mplot3d import Axes3D
@@ -456,18 +472,21 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def xlim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         self._axis.set_xlim(left=min_value, right=max_value)
         return self
 
 
+    @override
     def ylim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         self._axis.set_ylim(bottom=min_value, top=max_value)
         return self
 
 
+    @override
     def zlim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         if self.is_3d:
@@ -477,6 +496,7 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def xscale(self, scale: AxisScale, base: float = 10) -> IFigure:
         if scale == 'linear':
             self._axis.set_xscale(scale)
@@ -485,6 +505,7 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def yscale(self, scale: AxisScale, base: float = 10) -> IFigure:
         if scale == 'linear':
             self._axis.set_yscale(scale)
@@ -493,25 +514,30 @@ class MatplotFigure(IFigure):
         return self
 
 
+    @override
     def current_color(self) -> str:
         return self._color_scroller.current_color()
 
 
+    @override
     def scroll_color(self, count: int=1) -> str:
         return self._color_scroller.scroll_color(count)
 
 
+    @override
     def reset_color(self) -> IFigure:
         self._color_scroller.reset()
         return self
 
 
+    @override
     def axis_aspect(self, mode: AspectMode) -> IFigure:
         # https://stackoverflow.com/questions/8130823/set-matplotlib-3d-plot-aspect-ratio
         self._axis.set_aspect(aspect=mode)
         return self
 
 
+    @override
     def as_image(self) -> ndarray:
         if self._fig is None:
             raise RuntimeError('figure is closed')
@@ -530,17 +556,20 @@ class MatplotFigure(IFigure):
         return image.reshape([h, w, 4])
 
 
+    @override
     def save(self, filename: str | Path) -> IFigure:
         assert self._fig is not None, 'figure is closed'
         self._fig.savefig(filename, dpi=self.SAVING_DPI)
         return self
 
 
+    @override
     def close(self):
         self.engine.plt.close(self._fig)
         self._fig = None
 
 
+    @override
     def show(self, block: bool=True):
         assert self._fig is not None, 'figure is closed'
 

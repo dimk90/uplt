@@ -1,5 +1,12 @@
 # Changelog
 
+## `[v0.9.1]` - 17.12.2025
+
+#### Fixed
+* `[interface]` Fix issue with `override` importing.
+
+
+
 ## `[v0.9.0]` - 14.12.2025
 
 ### New
