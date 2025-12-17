@@ -20,6 +20,7 @@ dependencies = [
     "numpy   >= 1.21, < 3.0",  # 1.21: ArrayLike and extended annotations: https://numpy.org/devdocs/reference/typing.html
     "pillow  >= 11.3", # versions < 11.3 are vulnerable: https://security.snyk.io/package/pip/pillow
     "scipy   >= 1.11, < 2.0",
+    "typing-extensions >= 4.15, < 5.0",
 ]
 
 

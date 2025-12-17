@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 from pathlib import Path
 from numpy import ndarray
-from typing import Any, override
+from typing import Any
+from typing_extensions import override # Python 3.12 feature
 from numpy.typing import ArrayLike
 from collections.abc import Sequence
 
@@ -25,14 +26,17 @@ class PlotlyFigure5(IFigure):
     LINE_WIDTH = 2.5
 
     @property
+    @override
     def engine(self) -> PlotlyEngine5:
         return self._engine
 
     @property
+    @override
     def internal(self) -> Any | None:
         return self._fig
 
     @property
+    @override
     def is_3d(self) -> bool:
         return self._is_3d
 
@@ -49,6 +53,7 @@ class PlotlyFigure5(IFigure):
         self._group_counter: dict[str | None, int] = { None: 0 }
 
 
+    @override
     def plot(self, x           : ArrayLike,
                    y           : ArrayLike | None = None,
                    z           : ArrayLike | None = None,
@@ -98,6 +103,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def scatter(self, x           : ArrayLike,
                       y           : ArrayLike | None = None,
                       z           : ArrayLike | None = None,
@@ -144,6 +150,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def hline(self, y           : float,
                     x_min       : float | None = None,
                     x_max       : float | None = None,
@@ -174,6 +181,7 @@ class PlotlyFigure5(IFigure):
                          **kwargs)
 
 
+    @override
     def vline(self, x           : float,
                     y_min       : float | None = None,
                     y_max       : float | None = None,
@@ -203,6 +211,7 @@ class PlotlyFigure5(IFigure):
                          **kwargs)
 
 
+    @override
     def surface3d(self, x            : ArrayLike,
                         y            : ArrayLike | None = None,
                         z            : ArrayLike | None = None,
@@ -266,6 +275,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def bar(self, x           : ArrayLike,
                   y           : ArrayLike | None = None,
                   name        : str | None = None,
@@ -307,6 +317,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def imshow(self, image: ArrayLike, cmap: Colormap | None = None, **kwargs) -> IFigure:
         image = np.asarray(image)
         value_range = utool.image_range(image)
@@ -375,11 +386,13 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def title(self, text: str) -> IFigure:
         self._fig.update_layout(title=text)
         return self
 
 
+    @override
     def legend(self, show: bool = True,
                      equal_marker_size: bool = True,
                      **kwargs) -> IFigure:
@@ -395,6 +408,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def grid(self, show: bool = True) -> IFigure:
         from uplt.engine.plotly.scale import get_scale
 
@@ -419,6 +433,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def xlabel(self, text: str) -> IFigure:
         if self.is_3d:
             self._fig.update_layout(scene=dict(xaxis_title=text))
@@ -427,6 +442,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def ylabel(self, text: str) -> IFigure:
         if self.is_3d:
             self._fig.update_layout(scene=dict(yaxis_title=text))
@@ -435,12 +451,14 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def zlabel(self, text: str) -> IFigure:
         if self.is_3d:
             self._fig.update_layout(scene=dict(zaxis_title=text))
         return self
 
 
+    @override
     def xlim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         from uplt.engine.plotly.axis_range import estimate_axis_range
@@ -465,6 +483,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def ylim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         from uplt.engine.plotly.axis_range import estimate_axis_range
@@ -489,6 +508,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def zlim(self, min_value: float | None = None,
                    max_value: float | None = None) -> IFigure:
         if not self.is_3d:
@@ -506,6 +526,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def xscale(self, scale: AxisScale, base: float = 10) -> IFigure:
         from uplt.engine.plotly.scale import set_scale
 
@@ -514,6 +535,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def yscale(self, scale: AxisScale, base: float = 10) -> IFigure:
         from uplt.engine.plotly.scale import set_scale
 
@@ -522,19 +544,23 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def current_color(self) -> str:
         return self._color_scroller.current_color()
 
 
+    @override
     def scroll_color(self, count: int=1) -> str:
         return self._color_scroller.scroll_color(count)
 
 
+    @override
     def reset_color(self) -> IFigure:
         self._color_scroller.reset()
         return self
 
 
+    @override
     def axis_aspect(self, mode: AspectMode) -> IFigure:
         if self.is_3d:
             aspectmode = 'cube' if mode == 'equal' else 'auto'
@@ -548,6 +574,7 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def as_image(self) -> ndarray:
         import io
         from PIL import Image
@@ -562,6 +589,7 @@ class PlotlyFigure5(IFigure):
         return image
 
 
+    @override
     def save(self, filename: str | Path) -> IFigure:
         filename = Path(filename)
         if filename.suffix.lower() == '.html':
@@ -571,11 +599,13 @@ class PlotlyFigure5(IFigure):
         return self
 
 
+    @override
     def close(self):
         self._fig.data = []
         self._fig.layout = {}
 
 
+    @override
     def show(self, block: bool=True):
         if detect.is_marimo():
             # marimo can visualize plotly figure directly

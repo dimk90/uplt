@@ -1,4 +1,5 @@
 import importlib.util
+from typing_extensions import override # Python 3.12 feature
 from uplt.interface import IPlotEngine, IFigure
 
 
@@ -7,10 +8,12 @@ class MatplotEngine(IPlotEngine):
     AUTOMATIC_MPL_BACKEND: str | None = None
 
     @property
+    @override
     def name(self) -> str:
         return f'matplotlib-{self._backend.title().lower()}'
 
     @classmethod
+    @override
     def is_available(cls) -> bool:
         return importlib.util.find_spec("matplotlib") is not None
 
@@ -49,6 +52,8 @@ class MatplotEngine(IPlotEngine):
 
         self._backend = backend
 
+
+    @override
     def figure(self, width: int, aspect_ratio: float) -> IFigure:
         from uplt.engine.MatplotFigure import MatplotFigure
 
